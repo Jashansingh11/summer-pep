@@ -1,0 +1,17 @@
+def performOperations(arr, operations):
+    for left, right in operations:
+        arr[left:right + 1] = arr[left:right + 1][::-1]
+    return arr
+
+# Test
+arr = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+operations = [
+    [0, 9],
+    [4, 5],
+    [3, 6],
+    [2, 7],
+    [1, 8],
+    [0, 9]
+]
+
+print(performOperations(arr, operations))
