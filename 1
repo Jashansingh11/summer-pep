@@ -1,0 +1,11 @@
+#1st question Answer
+def create_paginator(items, pageSize):
+    for i in range(0, len(items), pageSize):
+        yield items[i:i + pageSize]
+
+
+items = [1, 3, 4, 6]
+pageSize = 2
+
+for page in create_paginator(items, pageSize):
+    print(page)
