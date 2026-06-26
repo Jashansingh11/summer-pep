@@ -1,0 +1,44 @@
+from typing import Optional, Tuple, Dict, List
+
+class State:
+    def __init__(self, name: str):
+        self.name = name
+    
+    def __repr__(self):
+        return self.name
+
+unauthorized = State("unauthorized")
+authorized = State("authorized")
+
+def login_checker(action_param: Optional[str], atm_password: str, atm_current_balance: int) -> Tuple[bool, int, Optional[any]]:
+    if action_param == atm_password:
+        return True, atm_current_balance, None
+    return False, atm_current_balance, None
+
+def logout_checker(action_param: Optional[any], atm_password: str, atm_current_balance: int) -> Tuple[bool, int, Optional[any]]:
+    return True, atm_current_balance, None
+
+def deposit_checker(action_param: Optional[str], atm_password: str, atm_current_balance: int) -> Tuple[bool, int, Optional[any]]:
+    amount = int(action_param) if action_param is not None else 0
+    return True, atm_current_balance + amount, None
+
+def withdraw_checker(action_param: Optional[str], atm_password: str, atm_current_balance: int) -> Tuple[bool, int, Optional[any]]:
+    amount = int(action_param) if action_param is not None else 0
+    if atm_current_balance >= amount:
+        return True, atm_current_balance - amount, None
+    return False, atm_current_balance, None
+
+def balance_checker(action_param: Optional[any], atm_password: str, atm_current_balance: int) -> Tuple[bool, int, Optional[any]]:
+    return True, atm_current_balance, atm_current_balance
+
+transition_table: Dict[State, List[Tuple[str, callable, State]]] = {
+    unauthorized: [
+        ("login", login_checker, authorized)
+    ],
+    authorized: [
+        ("logout", logout_checker, unauthorized),
+        ("deposit", deposit_checker, authorized),
+        ("withdraw", withdraw_checker, authorized),
+        ("balance", balance_checker, authorized)
+    ]
+}
